@@ -1,0 +1,15 @@
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\bin\Debug\net6.0\Quiz.exe
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\bin\Debug\net6.0\Quiz.deps.json
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\bin\Debug\net6.0\Quiz.runtimeconfig.json
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\bin\Debug\net6.0\Quiz.dll
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\bin\Debug\net6.0\Quiz.pdb
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\obj\Debug\net6.0\Quiz.csproj.AssemblyReference.cache
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\obj\Debug\net6.0\Quiz.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\obj\Debug\net6.0\Quiz.AssemblyInfoInputs.cache
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\obj\Debug\net6.0\Quiz.AssemblyInfo.cs
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\obj\Debug\net6.0\Quiz.csproj.CoreCompileInputs.cache
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\obj\Debug\net6.0\Quiz.dll
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\obj\Debug\net6.0\refint\Quiz.dll
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\obj\Debug\net6.0\Quiz.pdb
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\obj\Debug\net6.0\Quiz.genruntimeconfig.cache
+C:\Users\David\OneDrive\Documenten\GitHub\Concurrency-2023\Quiz_student\obj\Debug\net6.0\ref\Quiz.dll
