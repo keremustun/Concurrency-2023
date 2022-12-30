@@ -109,19 +109,52 @@ namespace ConcQuiz
         public override void SetUp()
         {
             //todo: implement the body
+            for(int i = 0; i<FixedParams.maxNumOfStudents; i++)
+			{
+				string std_name = " STUDENT NAME"; //todo: to be generated later
+				this.Students.AddLast(new Student(i + 1, std_name));
+			}
+			for(int i=0; i<FixedParams.maxNumOfTeachers; i++)
+            {
+                string teacher_name = " TEACHER NAME"; //todo: to be generated later
+                this.Teachers.AddLast(new Teacher((i + 1).ToString(), teacher_name));
+			}
+			// assign exams
+			foreach (Teacher t in this.Teachers)
+				t.AssignExam(this.Exam);
         }
 
         public override void PrepareExam(int maxNumOfQuestion)
         {
             //todo: implement the body
+            foreach (Teacher t in this.Teachers)
+				t.PrepareExam(maxNumOfQuestion);
         }
         public override void DistributeExam()
         {
             //todo: implement the body
+            foreach (Student s in this.Students)
+				s.AssignExam(this.Exam);
         }
         public override void StartExams()
         {
             //todo: implement the body
+            List<Thread> threads = new();
+
+            foreach (Student s in this.Students)
+            {
+                Thread thread = new(() => s.StartExam());
+                thread.Start();
+                threads.Add(thread);
+
+            }
+
+            foreach(Thread thread in threads)
+            {
+                thread.Join();
+            }
+        
+            
         }
 
         public string GetStatistics()

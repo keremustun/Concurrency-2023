@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Diagnostics;
+using ConcQuiz;
 //using ConcQuiz; //this has no implementation yet, fill it in and then uncomment this :)
 
 namespace Quiz
@@ -21,8 +22,8 @@ namespace Quiz
         public const int minThinkingTimeStudent = 20;
         public const int maxThinkingTimeStudent = 100;
         public const int maxNumOfQuestions = 40; 
-        public const int maxNumOfStudents = 200;
-        public const int maxNumOfTeachers = 10;
+        public const int maxNumOfStudents = 5;
+        public const int maxNumOfTeachers = 1;
         public const char delim = ',';
     }
 
@@ -36,17 +37,17 @@ namespace Quiz
             Stopwatch conSW = new Stopwatch();
 
             seqSW.Start();
-            QuizSequential sq = new QuizSequential();
-            sq.RunExams();
-            logSeqContent = logSeqContent + sq.FinalResult();
+            // QuizSequential sq = new QuizSequential();
+            // sq.RunExams();
+            // logSeqContent = logSeqContent + sq.FinalResult();
             seqSW.Stop();
 
             TimeSpan seqET = seqSW.Elapsed;
 
             conSW.Start();
-            //QuizConcurrent cq = new QuizConcurrent();
-            //cq.RunExams();
-            //logConcContent = logConcContent + cq.FinalResult();
+            QuizConcurrent cq = new QuizConcurrent();
+            cq.RunExams();
+            logConcContent = logConcContent + cq.FinalResult();
             conSW.Stop();
 
             TimeSpan conET = conSW.Elapsed;
