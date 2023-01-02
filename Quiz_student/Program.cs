@@ -36,11 +36,11 @@ namespace Quiz
             Stopwatch seqSW = new Stopwatch();
             Stopwatch conSW = new Stopwatch();
 
-            seqSW.Start();
-            QuizSequential sq = new QuizSequential();
-            sq.RunExams();
-            logSeqContent = logSeqContent + sq.FinalResult();
-            seqSW.Stop();
+            //seqSW.Start();
+            // QuizSequential sq = new QuizSequential();
+            // sq.RunExams();
+            // logSeqContent = logSeqContent + sq.FinalResult();
+            //seqSW.Stop();
 
             TimeSpan seqET = seqSW.Elapsed;
 
