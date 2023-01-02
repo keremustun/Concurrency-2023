@@ -228,14 +228,13 @@ namespace ConcQuiz
         
             
         }
-
         public string GetStatistics()
         {
             string result = "" , nl = "\n";
             int totalNumOfAnswers = 0;
             foreach (Question q in this.Exam.Questions)
                 totalNumOfAnswers += q.Answers.Count;
-            result = "#Students: " + this.ConcStudents.Count.ToString() + nl +
+            result = "#Students: " + this.Students.Count.ToString() + nl +
                 "#Teachers: " + this.Teachers.Count.ToString() + nl +
                 "#Questions: " + this.ConcExam.ConcQuestions.Count.ToString() + nl +
                 "#Answers: " + totalNumOfAnswers.ToString();
