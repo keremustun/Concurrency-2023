@@ -13,12 +13,16 @@ namespace ConcQuiz
     public class ConcQuestion : Question
     {
         //todo: add required fields, if necessary
+        private static Mutex mutex = new Mutex(); 
 
         public ConcQuestion(string txt, string tcode) : base(txt, tcode){}
 
         public override void AddAnswer(Answer a)
         {
+            mutex.WaitOne();
             //todo: implement the body 
+            this.Answers.AddLast(a);
+            mutex.ReleaseMutex();
         }
     }
 
@@ -70,11 +74,19 @@ namespace ConcQuiz
         }
         public override void ProposeQuestion()
         {
-            //todo: implement the body
+            this.Log("[Proposing Question]");
+
+            string qtext = " [This is the text for Question] ";
+            if (this.Exam is not null)
+                this.Exam.AddQuestion(this, qtext);
         }
         public override void PrepareExam(int maxNumOfQuestions)
         {
-            //todo: implement the body
+            for (int i = 0; i < maxNumOfQuestions; i++)
+            {
+                this.Think();
+                this.ProposeQuestion();
+            }
         }
         public override void Log(string logText = "")
         {
@@ -84,12 +96,18 @@ namespace ConcQuiz
     public class ConcExam: Exam
     {
         //todo: add required fields, if necessary
-
+		private int QuestionNumber;
+        private static Mutex mutex = new Mutex(); 
         public ConcExam(int number, string name = "") : base(number,name){}
 
         public override void AddQuestion(Teacher teacher, string text)
         {
-            //todo: implement the body
+            mutex.WaitOne();
+            this.QuestionNumber++;
+			Question q = new Question(text, teacher.Code);
+			this.Questions.AddLast(q);
+            this.Log("[Question is added]"+q.ToString());
+            mutex.ReleaseMutex();
         }
         public override void Log(string logText = "")
         {
@@ -123,18 +141,29 @@ namespace ConcQuiz
 			foreach (Teacher t in this.Teachers)
 				t.AssignExam(this.Exam);
         }
-
-        public override void PrepareExam(int maxNumOfQuestion)
-        {
-            //todo: implement the body
-            foreach (Teacher t in this.Teachers)
-				t.PrepareExam(maxNumOfQuestion);
-        }
         public override void DistributeExam()
         {
             //todo: implement the body
             foreach (Student s in this.Students)
 				s.AssignExam(this.Exam);
+        }
+        public override void PrepareExam(int maxNumOfQuestion)
+        {
+            //todo: implement the body
+            List<Thread> threads = new();
+
+            foreach (Teacher t in this.Teachers)
+            {
+                Thread thread = new(() => t.PrepareExam(maxNumOfQuestion));
+                thread.Start();
+                threads.Add(thread);
+
+            }
+
+            foreach(Thread thread in threads)
+            {
+                thread.Join();
+            }
         }
         public override void StartExams()
         {

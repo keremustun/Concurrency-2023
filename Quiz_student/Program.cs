@@ -23,7 +23,7 @@ namespace Quiz
         public const int maxThinkingTimeStudent = 100;
         public const int maxNumOfQuestions = 40; 
         public const int maxNumOfStudents = 5;
-        public const int maxNumOfTeachers = 1;
+        public const int maxNumOfTeachers = 5;
         public const char delim = ',';
     }
 
@@ -37,9 +37,9 @@ namespace Quiz
             Stopwatch conSW = new Stopwatch();
 
             seqSW.Start();
-            // QuizSequential sq = new QuizSequential();
-            // sq.RunExams();
-            // logSeqContent = logSeqContent + sq.FinalResult();
+            QuizSequential sq = new QuizSequential();
+            sq.RunExams();
+            logSeqContent = logSeqContent + sq.FinalResult();
             seqSW.Stop();
 
             TimeSpan seqET = seqSW.Elapsed;
