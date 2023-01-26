@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\David\\OneDrive\\Documenten\\GitHub\\Concurrency-2023\\Quiz_student\\Quiz.csproj",
+      "projectUniqueName": "C:\\Users\\David\\Downloads\\Quiz_student (1)\\Quiz_student\\Quiz.csproj",
       "projectName": "Quiz",
-      "projectPath": "C:\\Users\\David\\OneDrive\\Documenten\\GitHub\\Concurrency-2023\\Quiz_student\\Quiz.csproj",
+      "projectPath": "C:\\Users\\David\\Downloads\\Quiz_student (1)\\Quiz_student\\Quiz.csproj",
       "packagesPath": "C:\\Users\\David\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\David\\OneDrive\\Documenten\\GitHub\\Concurrency-2023\\Quiz_student\\obj\\",
+      "outputPath": "C:\\Users\\David\\Downloads\\Quiz_student (1)\\Quiz_student\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

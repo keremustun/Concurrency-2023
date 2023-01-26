@@ -1,17 +1,16 @@
 ﻿using System;
 using System.IO;
 using System.Diagnostics;
-using ConcQuiz;
-//using ConcQuiz; //this has no implementation yet, fill it in and then uncomment this :)
+using ConcQuiz; //this has no implementation yet, fill it in and then uncomment this :)
 
 namespace Quiz
 {
     // The values within WorkingParams can change during the experiments. 
     class SubmissionParams
     {
-        public const string studentNumberOne = ""; // This must be filled.
-        public const string studentNumberTwo = ""; // This must be filled. Keep it "" if you are working alone.
-        public const string classNumber = ""; // This must be filled. INF2A is just an example.
+        public const string studentNumberOne = "0993555"; // This must be filled.
+        public const string studentNumberTwo = "0964028"; // This must be filled. Keep it "" if you are working alone.
+        public const string classNumber = "INF4"; // This must be filled. INF2A is just an example.
     }
 
     // The values of FixedParams must not change in the final submission.
@@ -22,8 +21,8 @@ namespace Quiz
         public const int minThinkingTimeStudent = 20;
         public const int maxThinkingTimeStudent = 100;
         public const int maxNumOfQuestions = 40; 
-        public const int maxNumOfStudents = 5;
-        public const int maxNumOfTeachers = 5;
+        public const int maxNumOfStudents = 10;
+        public const int maxNumOfTeachers = 10;
         public const char delim = ',';
     }
 
@@ -36,11 +35,11 @@ namespace Quiz
             Stopwatch seqSW = new Stopwatch();
             Stopwatch conSW = new Stopwatch();
 
-            //seqSW.Start();
-            // QuizSequential sq = new QuizSequential();
-            // sq.RunExams();
-            // logSeqContent = logSeqContent + sq.FinalResult();
-            //seqSW.Stop();
+            seqSW.Start();
+            QuizSequential sq = new QuizSequential();
+            sq.RunExams();
+            logSeqContent = logSeqContent + sq.FinalResult();
+            seqSW.Stop();
 
             TimeSpan seqET = seqSW.Elapsed;
 

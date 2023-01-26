@@ -1,71 +1,60 @@
 ﻿using System;
 using Quiz;
 
-// todo: Complete the implementation
-
-/// Concurrent version of the Quiz
 namespace ConcQuiz
 {
-    public class ConcAnswer: Answer
+    public class ConcAnswer : Answer
     {
-        public ConcAnswer(ConcStudent std, string txt = ""): base(std,txt){}
+        public ConcAnswer(ConcStudent std, string txt = "") : base(std, txt) { }
     }
     public class ConcQuestion : Question
     {
-        //todo: add required fields, if necessary
-        private static Mutex mutex = new Mutex(); 
+        private static Mutex mutex = new Mutex();
 
-        public ConcQuestion(string txt, string tcode) : base(txt, tcode){}
+        public ConcQuestion(string txt, string tcode) : base(txt, tcode) { }
 
         public override void AddAnswer(Answer a)
         {
             mutex.WaitOne();
-            //todo: implement the body 
             this.Answers.AddLast(a);
             mutex.ReleaseMutex();
         }
     }
 
-    public class ConcStudent: Student
+    public class ConcStudent : Student
     {
-        // todo: add required fields
         private ConcExam? ConcExam;
         public LinkedListNode<ConcQuestion>? ConCurrent;
-        public ConcStudent(int num, string name): base(num,name){}
+        public ConcStudent(int num, string name) : base(num, name) { }
         public override void AssignExam(Exam e)
         {
-            //todo: implement the body
-            ConcExam = (ConcExam) e;
+            ConcExam = (ConcExam)e;
             this.Log("[Exam is Assigned]");
-         }
+        }
 
         public override void StartExam()
         {
-            //todo: implement the body
-            if(this.ConcExam is not null)
-				this.ConCurrent = this.ConcExam.ConcQuestions.First;
-			for(int i=0;i<this.ConcExam.ConcQuestions.Count;i++)
-			{
+            if (this.ConcExam is not null)
+                this.ConCurrent = this.ConcExam.Questions.First;
+            for (int i = 0; i < this.ConcExam.Questions.Count; i++)
+            {
                 this.Think();
-				this.ProposeAnswer();
+                this.ProposeAnswer();
             }
         }
 
         public override void Think()
         {
-            //todo: implement the body
+            Thread.Sleep(new Random().Next(FixedParams.minThinkingTimeStudent, FixedParams.maxThinkingTimeStudent));
         }
 
         public override void ProposeAnswer()
         {
-            //todo: implement the body
-                        if (this.ConCurrent is not null)
+            if (this.ConCurrent is not null)
             {
                 this.Log("\n[Proposing Answer]\n");
-				// add your answer
                 this.ConCurrent.Value.AddAnswer(new Answer(this));
-				// go for the next question
-				this.ConCurrent = this.ConCurrent.Next;
+                this.ConCurrent = this.ConCurrent.Next;
                 this.CurrentQuestionNumber++;
             }
         }
@@ -73,26 +62,25 @@ namespace ConcQuiz
 
         public override void Log(string logText = "")
         {
-            			string delim = " : " , nl = "\n";
-            string ToString =  "Student "+delim+this.Number.ToString()+nl+"Exam: "+this.ConcExam.Number.ToString()+" Total Num Questions: "+this.ConcExam.ConcQuestions.Count.ToString()+delim+"Current Question: "+this.CurrentQuestionNumber.ToString();
-			Console.WriteLine(logText+nl+ToString);
+            string delim = " : ", nl = "\n";
+            string ToString = "Student " + delim + this.Number.ToString() + nl + "Exam: " + this.ConcExam.Number.ToString() + " Total Num Questions: " + this.ConcExam.Questions.Count.ToString() + delim + "Current Question: " + this.CurrentQuestionNumber.ToString();
+            Console.WriteLine(logText + nl + ToString);
         }
 
     }
-    public class ConcTeacher: Teacher
+    public class ConcTeacher : Teacher
     {
-        //todo: add required fields, if necessary
         public ConcExam? ConcExam;
-        public ConcTeacher(string code, string name) : base(code,name){}
+        public ConcTeacher(string code, string name) : base(code, name) { }
 
         public override void AssignExam(Exam e)
-        {   
-            this.ConcExam = (ConcExam) e;
+        {
+            this.ConcExam = (ConcExam)e;
             this.Log("[Exam is Assigned]");
         }
         public override void Think()
         {
-            //todod: implement the body
+            Thread.Sleep(new Random().Next(FixedParams.minThinkingTimeTeacher, FixedParams.maxThinkingTimeTeacher));
         }
         public override void ProposeQuestion()
         {
@@ -101,7 +89,7 @@ namespace ConcQuiz
             string qtext = " [This is the text for Question] ";
             if (this.ConcExam is not null)
 
-              this.ConcExam.AddQuestion(this, qtext);
+                this.ConcExam.AddQuestion(this, qtext);
         }
         public override void PrepareExam(int maxNumOfQuestions)
         {
@@ -117,17 +105,17 @@ namespace ConcQuiz
             Console.WriteLine(this.ToString() + nl + logText);
         }
     }
-    public class ConcExam: Exam
+    public class ConcExam : Exam
     {
-        //todo: add required fields, if necessary
-		private int QuestionNumber;
+        private int QuestionNumber;
         private string Name;
         public int Number;
-        public LinkedList<ConcQuestion> ConcQuestions;
-        private static Mutex mutex = new Mutex(); 
-        public ConcExam(int number, string name = "") : base(number,name){
-            this.ConcQuestions = new LinkedList<ConcQuestion>();
-			this.QuestionNumber = 0;
+        public LinkedList<ConcQuestion> Questions;
+        private static Mutex mutex = new Mutex();
+        public ConcExam(int number, string name = "") : base(number, name)
+        {
+            this.Questions = new LinkedList<ConcQuestion>();
+            this.QuestionNumber = 0;
             this.Name = name;
             this.Number = number;
         }
@@ -135,61 +123,76 @@ namespace ConcQuiz
         public override void AddQuestion(Teacher teacher, string text)
         {
             this.QuestionNumber++;
-			ConcQuestion q = new ConcQuestion(text, teacher.Code);
-			this.ConcQuestions.AddLast(q);
-            Console.WriteLine(this.Number);
-            this.Log("[Question is added]"+q.ToString());
+            ConcQuestion q = new ConcQuestion(text, teacher.Code);
+            mutex.WaitOne();
+            this.Questions.AddLast(q);
+            mutex.ReleaseMutex();
+            this.Log("[Question is added]" + q.ToString());
         }
 
-        //might have to be removed
-    
+
         public override void Log(string logText = "")
         {
             string delim = " : ", nl = "\n";
-            string ToString =  "Exam "+delim+this.Number.ToString()+delim+" Total Num Questions: "+this.QuestionNumber.ToString();
+            string ToString = "Exam " + delim + this.Number.ToString() + delim + " Total Num Questions: " + this.QuestionNumber.ToString();
             Console.WriteLine(ToString + nl + logText);
         }
     }
 
     public class ConcClassroom : Classroom
     {
-        //todo: add required fields, if necessary
-        public ConcExam ConcExam;
-        public LinkedList<ConcStudent> ConcStudents;
-        public LinkedList<ConcTeacher> ConcTeachers;
+        public ConcExam Exam;
+        public LinkedList<ConcStudent> Students;
+        public LinkedList<ConcTeacher> Teachers;
 
 
         public ConcClassroom(int examNumber = 1, string examName = "Programming") : base(examNumber, examName)
         {
-            //todo: implement the body
-            this.ConcStudents = new LinkedList<ConcStudent>();
-			this.ConcTeachers = new LinkedList<ConcTeacher>();
-            this.ConcExam = new ConcExam(examNumber, examName);
+            this.Students = new LinkedList<ConcStudent>();
+            this.Teachers = new LinkedList<ConcTeacher>();
+            this.Exam = new ConcExam(examNumber, examName);
+        }
+
+        public static string GenerateName(int len)
+        {
+            Random r = new Random();
+            string[] consonants = { "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "l", "n", "p", "q", "r", "s", "sh", "zh", "t", "v", "w", "x" };
+            string[] vowels = { "a", "e", "i", "o", "u", "ae", "y" };
+            string Name = "";
+            Name += consonants[r.Next(consonants.Length)].ToUpper();
+            Name += vowels[r.Next(vowels.Length)];
+            int b = 2; //b tells how many times a new letter has been added. It's 2 right now because the first two letters are already in the name.
+            while (b < len)
+            {
+                Name += consonants[r.Next(consonants.Length)];
+                b++;
+                Name += vowels[r.Next(vowels.Length)];
+                b++;
+            }
+
+            return Name;
         }
 
         public override void SetUp()
         {
-            //todo: implement the body
-            for(int i = 0; i<FixedParams.maxNumOfStudents; i++)
-			{
-				string std_name = " STUDENT NAME"; //todo: to be generated later
-				this.ConcStudents.AddLast(new ConcStudent(i + 1, std_name));
-			}
-			for(int i=0; i<FixedParams.maxNumOfTeachers; i++)
+            for (int i = 0; i < FixedParams.maxNumOfStudents; i++)
             {
-                string teacher_name = " TEACHER NAME"; //todo: to be generated later
-                this.ConcTeachers.AddLast(new ConcTeacher((i + 1).ToString(), teacher_name));
-			}
-			// assign exams
-			foreach (ConcTeacher t in this.ConcTeachers)
-				t.AssignExam(this.ConcExam);
+                string std_name = GenerateName(6); //todo: to be generated later
+                this.Students.AddLast(new ConcStudent(i + 1, std_name));
+            }
+            for (int i = 0; i < FixedParams.maxNumOfTeachers; i++)
+            {
+                string teacher_name = GenerateName(7); //todo: to be generated later
+                this.Teachers.AddLast(new ConcTeacher((i + 1).ToString(), teacher_name));
+            }
+            foreach (ConcTeacher t in this.Teachers)
+                t.AssignExam(this.Exam);
         }
         public override void PrepareExam(int maxNumOfQuestion)
         {
-            //todo: implement the body
             List<Thread> threads = new();
 
-            foreach (ConcTeacher t in this.ConcTeachers)
+            foreach (ConcTeacher t in this.Teachers)
             {
                 Thread thread = new(() => t.PrepareExam(maxNumOfQuestion));
                 thread.Start();
@@ -197,23 +200,21 @@ namespace ConcQuiz
 
             }
 
-            foreach(Thread thread in threads)
+            foreach (Thread thread in threads)
             {
                 thread.Join();
             }
         }
         public override void DistributeExam()
         {
-            //todo: implement the body
-            foreach (ConcStudent s in this.ConcStudents)
-				s.AssignExam(this.ConcExam);
+            foreach (ConcStudent s in this.Students)
+                s.AssignExam(this.Exam);
         }
         public override void StartExams()
         {
-            //todo: implement the body
             List<Thread> threads = new();
 
-            foreach (ConcStudent s in this.ConcStudents)
+            foreach (ConcStudent s in this.Students)
             {
                 Thread thread = new(() => s.StartExam());
                 thread.Start();
@@ -221,22 +222,22 @@ namespace ConcQuiz
 
             }
 
-            foreach(Thread thread in threads)
+            foreach (Thread thread in threads)
             {
                 thread.Join();
             }
-        
-            
+
+
         }
         public string GetStatistics()
         {
-            string result = "" , nl = "\n";
+            string result = "", nl = "\n";
             int totalNumOfAnswers = 0;
             foreach (Question q in this.Exam.Questions)
                 totalNumOfAnswers += q.Answers.Count;
             result = "#Students: " + this.Students.Count.ToString() + nl +
                 "#Teachers: " + this.Teachers.Count.ToString() + nl +
-                "#Questions: " + this.ConcExam.ConcQuestions.Count.ToString() + nl +
+                "#Questions: " + this.Exam.Questions.Count.ToString() + nl +
                 "#Answers: " + totalNumOfAnswers.ToString();
             return result;
         }
