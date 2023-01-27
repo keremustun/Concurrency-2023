@@ -153,24 +153,28 @@ namespace ConcQuiz
             this.Exam = new ConcExam(examNumber, examName);
         }
 
-        public static string GenerateName(int len)
+        public static string GenerateName(int length)
         {
+            string[] vwls = { "a", "e", "i", "o", "u", "y", "ae" };
+            string[] cnsnts = { "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "l", "n", "p", "q", "r", "s", "sh", "zh", "t", "v", "w", "x" };
+            
             Random r = new Random();
-            string[] consonants = { "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "l", "n", "p", "q", "r", "s", "sh", "zh", "t", "v", "w", "x" };
-            string[] vowels = { "a", "e", "i", "o", "u", "ae", "y" };
-            string Name = "";
-            Name += consonants[r.Next(consonants.Length)].ToUpper();
-            Name += vowels[r.Next(vowels.Length)];
-            int b = 2; //b tells how many times a new letter has been added. It's 2 right now because the first two letters are already in the name.
-            while (b < len)
+
+            string studentName = "";
+            studentName += cnsnts[r.Next(cnsnts.Length)].ToUpper();
+            studentName += vwls[r.Next(vwls.Length)];
+         
+            int x = 2; 
+
+            while (x < length)
             {
-                Name += consonants[r.Next(consonants.Length)];
-                b++;
-                Name += vowels[r.Next(vowels.Length)];
-                b++;
+                studentName += cnsnts[r.Next(cnsnts.Length)];
+                x++;
+                studentName += vwls[r.Next(vwls.Length)];
+                x++;
             }
 
-            return Name;
+            return studentName;
         }
 
         public override void SetUp()
@@ -188,6 +192,7 @@ namespace ConcQuiz
             foreach (ConcTeacher t in this.Teachers)
                 t.AssignExam(this.Exam);
         }
+
         public override void PrepareExam(int maxNumOfQuestion)
         {
             List<Thread> threads = new();
@@ -197,7 +202,6 @@ namespace ConcQuiz
                 Thread thread = new(() => t.PrepareExam(maxNumOfQuestion));
                 thread.Start();
                 threads.Add(thread);
-
             }
 
             foreach (Thread thread in threads)
